@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}고객 관리 — 마케팅 CRM{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>고객 관리</h1>
+  <a href="/customers/new" class="btn btn-primary">+ 고객 추가</a>
+</div>
+
+<div class="card">
+  <form method="get" class="search-bar">
+    <input class="form-control" name="q" placeholder="이름·이메일 검색" value="{{ q }}"/>
+    <button class="btn btn-secondary" type="submit">검색</button>
+  </form>
+
+  {% if customers %}
+  <table>
+    <thead>
+      <tr><th>이름</th><th>이메일</th><th>전화</th><th>인스타그램</th><th>문의 수</th><th>등록일</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for c in customers %}
+    <tr>
+      <td><a href="/customers/{{ c.id }}">{{ c.name }}</a></td>
+      <td>{{ c.email or '-' }}</td>
+      <td>{{ c.phone or '-' }}</td>
+      <td>{{ c.instagram_id or '-' }}</td>
+      <td>{{ c.inquiries|length }}</td>
+      <td>{{ c.created_at.strftime('%Y/%m/%d') }}</td>
+      <td><a href="/customers/{{ c.id }}" class="btn btn-secondary btn-sm">상세</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">고객이 없습니다.</div>
+  {% endif %}
+</div>
+{% endblock %}

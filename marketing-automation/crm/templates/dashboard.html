@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}대시보드 — 마케팅 CRM{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>대시보드</h1>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="value">{{ total_customers }}</div>
+    <div class="label">전체 고객</div>
+  </div>
+  <div class="stat-card" style="border-color:#f59e0b">
+    <div class="value">{{ open_inquiries }}</div>
+    <div class="label">미처리 문의</div>
+  </div>
+  <div class="stat-card" style="border-color:#22c55e">
+    <div class="value">{{ total_inquiries }}</div>
+    <div class="label">전체 문의</div>
+  </div>
+  <div class="stat-card" style="border-color:#a855f7">
+    <div class="value">{{ new_this_week }}</div>
+    <div class="label">이번 주 신규 문의</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="page-header" style="margin-bottom:16px">
+    <h2 style="font-size:16px;font-weight:700">최근 문의</h2>
+    <a href="/inquiries/new" class="btn btn-primary btn-sm">+ 새 문의</a>
+  </div>
+  {% if recent_inquiries %}
+  <table>
+    <thead>
+      <tr><th>ID</th><th>고객</th><th>채널</th><th>제목</th><th>상태</th><th>접수일</th></tr>
+    </thead>
+    <tbody>
+    {% for inq in recent_inquiries %}
+    <tr>
+      <td><a href="/inquiries/{{ inq.id }}">#{{ inq.id }}</a></td>
+      <td><a href="/customers/{{ inq.customer.id }}">{{ inq.customer.name }}</a></td>
+      <td><span class="badge badge-{{ inq.channel.value }}">{{ inq.channel.value }}</span></td>
+      <td>{{ inq.subject or inq.content[:40] }}</td>
+      <td><span class="badge badge-{{ inq.status.value }}">{{ inq.status.value }}</span></td>
+      <td>{{ inq.created_at.strftime('%m/%d %H:%M') }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">문의 내역이 없습니다.</div>
+  {% endif %}
+</div>
+{% endblock %}

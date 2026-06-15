@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}문의 #{{ inquiry.id }} — 마케팅 CRM{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>문의 #{{ inquiry.id }} — {{ inquiry.customer.name }}</h1>
+  <a href="/inquiries" class="btn btn-secondary">← 목록</a>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px">
+  <!-- 대화 타임라인 -->
+  <div>
+    <div class="card">
+      <div style="margin-bottom:16px">
+        <span class="badge badge-{{ inquiry.channel.value }}">{{ inquiry.channel.value }}</span>
+        <span class="badge badge-{{ inquiry.status.value }}" style="margin-left:6px">{{ inquiry.status.value }}</span>
+        {% if inquiry.assigned_to %}
+        <span style="font-size:13px;color:#888;margin-left:8px">담당: {{ inquiry.assigned_to }}</span>
+        {% endif %}
+      </div>
+      {% if inquiry.subject %}
+      <h2 style="font-size:16px;margin-bottom:12px">{{ inquiry.subject }}</h2>
+      {% endif %}
+      <div class="timeline">
+        <!-- 원본 문의 -->
+        <div class="timeline-item">
+          <div class="meta">{{ inquiry.customer.name }} · {{ inquiry.created_at.strftime('%Y/%m/%d %H:%M') }}</div>
+          <div class="bubble">{{ inquiry.content }}</div>
+        </div>
+        <!-- 응답 이력 -->
+        {% for resp in inquiry.responses %}
+        <div class="timeline-item {% if resp.is_internal %}internal{% endif %}">
+          <div class="meta">
+            {{ resp.author }}
+            {% if resp.is_internal %}<span style="color:#d97706"> · 내부메모</span>{% endif %}
+            · {{ resp.created_at.strftime('%Y/%m/%d %H:%M') }}
+          </div>
+          <div class="bubble">{{ resp.content }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- 답변 작성 -->
+    <div class="card">
+      <h3 style="font-size:14px;font-weight:700;margin-bottom:14px">답변 작성</h3>
+      <form method="post" action="/inquiries/{{ inquiry.id }}/respond">
+        <div class="form-group">
+          <label>작성자</label>
+          <input class="form-control" name="author" required placeholder="이름"/>
+        </div>
+        <div class="form-group">
+          <label>내용</label>
+          <textarea class="form-control" name="content" required style="min-height:120px" placeholder="답변 내용..."></textarea>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <label style="font-size:13px;display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" name="is_internal" value="true"/> 내부 메모 (고객에게 미발송)
+          </label>
+          <button class="btn btn-primary" type="submit">답변 등록</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 상태 변경 -->
+  <div>
+    <div class="card">
+      <h3 style="font-size:14px;font-weight:700;margin-bottom:14px">상태 변경</h3>
+      <form method="post" action="/inquiries/{{ inquiry.id }}/status">
+        <div class="form-group">
+          <select class="form-control" name="status">
+            <option value="open" {% if inquiry.status.value=='open' %}selected{% endif %}>open</option>
+            <option value="in_progress" {% if inquiry.status.value=='in_progress' %}selected{% endif %}>in_progress</option>
+            <option value="resolved" {% if inquiry.status.value=='resolved' %}selected{% endif %}>resolved</option>
+            <option value="closed" {% if inquiry.status.value=='closed' %}selected{% endif %}>closed</option>
+          </select>
+        </div>
+        <button class="btn btn-success btn-sm" type="submit" style="width:100%">변경</button>
+      </form>
+    </div>
+    <div class="card">
+      <h3 style="font-size:14px;font-weight:700;margin-bottom:10px">고객 정보</h3>
+      <p style="font-size:13px;margin-bottom:4px"><a href="/customers/{{ inquiry.customer.id }}">{{ inquiry.customer.name }}</a></p>
+      {% if inquiry.customer.email %}<p style="font-size:13px;color:#555">{{ inquiry.customer.email }}</p>{% endif %}
+      {% if inquiry.customer.phone %}<p style="font-size:13px;color:#555">{{ inquiry.customer.phone }}</p>{% endif %}
+      {% if inquiry.customer.instagram_id %}<p style="font-size:13px;color:#555">@{{ inquiry.customer.instagram_id }}</p>{% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
