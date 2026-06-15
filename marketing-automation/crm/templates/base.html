@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}마케팅 CRM{% endblock %}</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:#f4f6f9;color:#333;display:flex;min-height:100vh}
+    nav{width:220px;min-height:100vh;background:#1a1d2e;color:#cdd;padding:24px 0;flex-shrink:0}
+    nav .logo{padding:0 20px 24px;font-size:18px;font-weight:700;color:#fff;border-bottom:1px solid #2e3150}
+    nav a{display:block;padding:12px 20px;color:#9aa;text-decoration:none;font-size:14px;transition:background .2s}
+    nav a:hover,nav a.active{background:#2e3150;color:#fff}
+    nav .nav-section{padding:12px 20px 4px;font-size:11px;color:#556;text-transform:uppercase;letter-spacing:.05em;margin-top:8px}
+    main{flex:1;padding:32px;overflow-x:auto}
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    .page-header h1{font-size:22px;font-weight:700}
+    .btn{display:inline-block;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;text-decoration:none;transition:opacity .2s}
+    .btn-primary{background:#4f7dff;color:#fff}.btn-primary:hover{opacity:.88}
+    .btn-secondary{background:#e4e8f0;color:#555}.btn-secondary:hover{opacity:.8}
+    .btn-success{background:#22c55e;color:#fff}.btn-success:hover{opacity:.88}
+    .btn-danger{background:#ef4444;color:#fff}
+    .btn-sm{padding:4px 10px;font-size:12px}
+    .card{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.07);padding:20px;margin-bottom:20px}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+    .stat-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.07);border-left:4px solid #4f7dff}
+    .stat-card .value{font-size:32px;font-weight:700;color:#1a1d2e}
+    .stat-card .label{font-size:13px;color:#888;margin-top:4px}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    thead th{background:#f8fafc;padding:10px 12px;text-align:left;font-weight:600;color:#555;border-bottom:2px solid #e8ecf0}
+    tbody td{padding:10px 12px;border-bottom:1px solid #f0f2f5}
+    tbody tr:hover{background:#fafbfc}
+    .badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+    .badge-open{background:#fef3c7;color:#d97706}
+    .badge-in_progress{background:#dbeafe;color:#2563eb}
+    .badge-resolved{background:#dcfce7;color:#16a34a}
+    .badge-closed{background:#f1f5f9;color:#64748b}
+    .badge-email{background:#ede9fe;color:#7c3aed}
+    .badge-instagram{background:#fce7f3;color:#be185d}
+    .badge-youtube{background:#fee2e2;color:#dc2626}
+    .badge-phone{background:#e0f2fe;color:#0369a1}
+    .badge-direct{background:#f0fdf4;color:#15803d}
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#555}
+    .form-control{width:100%;padding:8px 12px;border:1px solid #dde2ea;border-radius:6px;font-size:14px;outline:none;transition:border .2s}
+    .form-control:focus{border-color:#4f7dff}
+    textarea.form-control{min-height:100px;resize:vertical}
+    .search-bar{display:flex;gap:8px;margin-bottom:16px}
+    .search-bar .form-control{max-width:320px}
+    .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+    .filter-bar select{padding:6px 10px;border:1px solid #dde2ea;border-radius:6px;font-size:13px;cursor:pointer}
+    .timeline{border-left:2px solid #e8ecf0;padding-left:20px;margin-top:16px}
+    .timeline-item{position:relative;margin-bottom:20px}
+    .timeline-item::before{content:'';position:absolute;left:-26px;top:6px;width:10px;height:10px;border-radius:50%;background:#4f7dff;border:2px solid #fff;box-shadow:0 0 0 2px #4f7dff}
+    .timeline-item.internal::before{background:#f59e0b}
+    .timeline-item .meta{font-size:12px;color:#888;margin-bottom:4px}
+    .timeline-item .bubble{background:#f8fafc;border-radius:8px;padding:12px;font-size:14px;line-height:1.6}
+    .timeline-item.internal .bubble{background:#fffbeb;border:1px solid #fde68a}
+    .empty{text-align:center;color:#aaa;padding:40px;font-size:14px}
+    a{color:#4f7dff;text-decoration:none}a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+<nav>
+  <div class="logo">📊 마케팅 CRM</div>
+  <div class="nav-section">메뉴</div>
+  <a href="/" {% if request.url.path=='/' %}class="active"{% endif %}>대시보드</a>
+  <a href="/customers" {% if '/customers' in request.url.path %}class="active"{% endif %}>고객 관리</a>
+  <a href="/inquiries" {% if '/inquiries' in request.url.path %}class="active"{% endif %}>문의 관리</a>
+</nav>
+<main>
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>

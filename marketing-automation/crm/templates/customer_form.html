@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}고객 추가 — 마케팅 CRM{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{% if customer %}고객 수정{% else %}고객 추가{% endif %}</h1>
+  <a href="/customers" class="btn btn-secondary">← 목록</a>
+</div>
+<div class="card" style="max-width:560px">
+  <form method="post" action="{% if customer %}/customers/{{ customer.id }}/edit{% else %}/customers/new{% endif %}">
+    <div class="form-group">
+      <label>이름 *</label>
+      <input class="form-control" name="name" required value="{{ customer.name if customer else '' }}"/>
+    </div>
+    <div class="form-group">
+      <label>이메일</label>
+      <input class="form-control" name="email" type="email" value="{{ customer.email if customer else '' }}"/>
+    </div>
+    <div class="form-group">
+      <label>전화번호</label>
+      <input class="form-control" name="phone" value="{{ customer.phone if customer else '' }}"/>
+    </div>
+    <div class="form-group">
+      <label>인스타그램 ID</label>
+      <input class="form-control" name="instagram_id" value="{{ customer.instagram_id if customer else '' }}"/>
+    </div>
+    <div class="form-group">
+      <label>메모</label>
+      <textarea class="form-control" name="memo">{{ customer.memo if customer else '' }}</textarea>
+    </div>
+    <button class="btn btn-primary" type="submit">저장</button>
+  </form>
+</div>
+{% endblock %}
